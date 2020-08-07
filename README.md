@@ -9,4 +9,4 @@ Commenting/uncommenting certain calls at the top of the program will demonstrate
 DO NOT RUN THIS CODE ON AN ACTUAL CALCULATOR. I haven't confirmed whether it's 100% safe yet. (I mean, as-is, it *should* be fine; it doesn't crash my 84+. But still, part of the debug code relies on some 84+-specific ports to slow the thing down.) There is next to zero error handling here: Garbage in, possibly bricked machine out.
 
 
-The folder old_Basic_files has some old TI-Basic files from years ago. Some of them were attempts at the backend (made obsolete by the z80 backend I'm working on now), but there should also be some frontend code in there that'll be useful. (IIRC, QRGRID should be particularly useful. I'll have to look into them later.)
+The folder old_Basic_files has some old TI-Basic files from years ago. Some of them were attempts at the backend (made obsolete by the z80 backend I'm working on now), but there should also be some frontend code in there that'll be useful.
