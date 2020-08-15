@@ -1,5 +1,9 @@
 ;#SECTION "MAIN", CODE
 
+.nolist
+#include "ti83plus.inc"
+.list
+
 	.org	userMem-2
 	.db	$BB, $6D
 Start:
@@ -11,10 +15,10 @@ Start:
 	ldir
 ; CALL LINE_COUNT
 	call	test_rsencode
-; CALL test_rsgp
+ ;CALL test_rsgp
 ; CALL test_pmxpa
 ; CALL test_gf_pow
-; CALL test_poly_add
+;; CALL test_poly_add
 ; CALL test_poly_mult
 ; CALL test_gf_mult
 ; CALL test_poly_scale
@@ -22,13 +26,13 @@ Start:
 
 ;
 test_rsencode:
-	ld	a, 12
+	ld	a, 10 ; 17
 ; LD   HL,$08
 ; CALL disp_wrapper
 ; LD   BC,$08
 	ld	b, 0
 	ld	de, msg_in
-	ld	hl, DATA0
+	ld	hl,  HELLO_WORLD_1M ; DATA0
 	ld	c, (hl)
 ; EX   DE,HL
 	inc	bc
@@ -42,7 +46,7 @@ test_rsencode:
 
 ;
 test_rsgp:
-	ld	a, 8
+	ld	a, 10
 	ld	de, PLYMLTANS
 	call	rs_generator_poly
 	ld	hl, PLYMLTANS
@@ -67,13 +71,13 @@ test_gf_pow:
 	call	gf_pow_noLUT
 	ld	h, l
 	ld	l, d
-	B_CALL	_DispHL
-	B_CALL	_NewLine
+	B_CALL(	_DispHL)
+	B_CALL(	_NewLine)
 	ld	b, $45
 	call	gf_exp2_noLUT
 	ld	h, b
 	ld	l, a
-	B_CALL	_DispHL
+	B_CALL(_DispHL)
 	ret
 
 ;
@@ -89,13 +93,13 @@ test_poly_mult:
 ; RET
 ;
 ;
-test_poly_add:
-	ld	hl, DATA1
-	ld	de, DATA2
-	ld	bc, PLYMLTANS
-	call	poly_add
-	ld	hl, PLYMLTANS
-	jp	DISP_POLY
+;test_poly_add:
+;	ld	hl, DATA1
+;	ld	de, DATA2
+;	ld	bc, PLYMLTANS
+;	call	poly_add
+;	ld	hl, PLYMLTANS
+;	jp	DISP_POLY
 
 ; CALL DISP_POLY
 ; RET
@@ -107,7 +111,7 @@ test_gf_mult:
 	call	gf_mult_noLUT
 	ld	h, 0
 	ld	l, c
-	B_CALL	_DispHL
+	B_CALL(_DispHL)
 	ret
 
 ;
@@ -116,11 +120,11 @@ test_poly_scale:
 	ld	de, PLYMLTANS
 	ld	a, 4
 	call	poly_scale
-	B_CALL	_DispHL
-	B_CALL	_NewLine
+	B_CALL(_DispHL)
+	B_CALL(_NewLine)
 	ld	hl, PLYMLTANS
-	B_CALL	_DispHL
-	B_CALL	_NewLine
+	B_CALL(_DispHL)
+	B_CALL	(_NewLine)
 	ld	hl, PLYMLTANS
 ; CALL DISP_POLY
 ; RET
@@ -132,25 +136,37 @@ DISP_POLY:
 	cp	b
 	jr	c, nope
 	dec	hl
+	ld c,0
 LBL01:
 	inc	hl
-	ld	a, (hl)
-	push	bc
-	push	hl
+	push hl
+	push bc
+	ld	l, (hl)
 	ld	h, 0
-	ld	l, a
-	B_CALL	_DispHL
+	bcall(_DispHL)
 	call	wait
-	B_CALL	_NewLine
+	pop bc
+	bit 0,c
+	call z,print_a_space
+	call nz,print_newline
 	pop	hl
-	pop	bc
+	inc	c
 	djnz	LBL01
+	ret
+print_a_space:
+	ld a, ' '
+	bcall(_PutC)	; destroys none
+	ret
+print_newline:
+	push bc
+	bcall(_NewLine)
+	pop bc
 	ret
 
 nope:
 ; LD   L,B
 ; LD   H,0
-	B_CALL	_DispHL
+	B_CALL(_DispHL)
 	ret
 
 ;#SECTION "PLYSCALE", CODE
@@ -185,21 +201,29 @@ poly_scale_lbl1:
 
 ;#SECTION "QRDATA", DATA
 
-TEMPBC equ	saveSScreen
-; TEMPBC = appBackUpScreen
+;TEMPBC .equ	saveSScreen
+TEMPBC .equ appBackUpScreen	;;;;;;
 ;
 ;
-PLYMLTANS .equ	appBackUpScreen
+PLYMLTANS .equ	appBackUpScreen+2	;;;;;
 ; PMLTTMP = PLYMLTANS+256
 ; PMLTTMP2 = PMLTTMP+256
-PMLTTMP .equ	PLYMLTANS + 128
-PMLTTMP2 .equ	PMLTTMP + 128
+PMLTTMP .equ	PLYMLTANS + 64; 128
+PMLTTMP2 .equ	PMLTTMP + 64;128
 ;
-GENTMP .equ	PMLTTMP2 + 128
+GENTMP .equ	PMLTTMP2 + 64;128
 ; GENTMP = saveSScreen+8
-GENOUT .equ	GENTMP + 128
+GENOUT .equ	GENTMP ; + 32 ; 16 ;64;128
+; no longer need GENTMP, since rs_g_poly now uses in-place multiplication
 ;
 ;
+HELLO_WORLD_1M:
+.db 16, 32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 0,0,0,0,0,0,0,0
+;.db 16
+;.db %00100000, %01011011, %00001011, %01111000, %11010001, %01110010, %11011100
+;.db %01001101, %01000011, %01000000, %11101100, %00010001, %11101100, %00010001
+;.db %11101100, %00010001
+
 DATA:  ; uses the others as a single 30-byte string
 	.db	30
 DATA0:
@@ -303,48 +327,47 @@ gf_exp2_lbl1:
 	ret
 
 ;#SECTION "POLYADD", CODE
+;;; Not needed?
+;; INPUTS:
+;;  DE, HL: Ptrs to plyn addends
+;;  BC:  Ptr to polynoial sum
+;; OUTPUT:
+;; DESTROYED: ALL
+;poly_add:
+;	ld	a, (de)
+;	cp	(hl)
+;	jr	nc, paddlbl1
+;; if (DE)<(HL)
+;	ex	de, hl
+;	ld	a, (de)
+;paddlbl1:
+;; assert  A=(DE) >= (HL)
+;	ld	(bc), a
+;	push	hl
+;; PUSH DE
+;	push	bc
+;; DE -> HL
+;	ex	de, hl
+;	ld	d, b
+;	ld	e, c
+;	ld	b, 0
+;	ld	c, a
+;	inc	de
+;	inc	hl
+;	ldir
+;
+;	pop	de
+;	pop	hl
+;	ld	b, (hl)
+;paddlbl2:
+;	inc	hl
+;	inc	de
+;	ld	a, (de)
+;	xor	(hl)
+;	ld	(de), a
+;	djnz	paddlbl2
+;	ret
 
-; INPUTS:
-;  DE, HL: Ptrs to plyn addends
-;  BC:  Ptr to polynoial sum
-; OUTPUT:
-; DESTROYED: ALL
-poly_add:
-;
-	ld	a, (de)
-	cp	(hl)
-	jr	nc, paddlbl1
-; if (DE)<(HL)
-	ex	de, hl
-	ld	a, (de)
-paddlbl1:
-; assert  A=(DE) >= (HL)
-	ld	(bc), a
-	push	hl
-; PUSH DE
-	push	bc
-;
-; DE -> HL
-	ex	de, hl
-	ld	d, b
-	ld	e, c
-	ld	b, 0
-	ld	c, a
-	inc	de
-	inc	hl
-	ldir
-;
-	pop	de
-	pop	hl
-	ld	b, (hl)
-paddlbl2:
-	inc	hl
-	inc	de
-	ld	a, (de)
-	xor	(hl)
-	ld	(de), a
-	djnz	paddlbl2
-	ret
 
 ;#SECTION "POLYMULT", CODE
 
@@ -484,11 +507,6 @@ pmxpa_lbl1:
 pmult_x_plus_A_HI:
 	push	hl
 	inc	de
-; LD   H,D
-; LD   L,E
-; CALL disp_wrapper
-; POP  HL
-; PUSH HL
 	push	de
 	call	poly_scale
 ; LD   (HL),B
@@ -503,8 +521,6 @@ pmult_x_plus_A_HI:
 	ex	de, hl
 	pop	hl
 	ld	b, (hl)
-; This would be the perfect place for a macro
-; INC  DE
 xpa_rev_lbl1:
 	inc	de
 	inc	hl
@@ -521,12 +537,14 @@ xpa_rev_lbl1:
 ; DE: Ptr to output
 ; DESTROYED: all except DE ?
 ; Also, I think C=nsym
-rs_generator_poly:
+rs_generator_poly:	; OBSOLETE?
+	JP rs_g_poly	; jump directly to new version
+	;
 	or	a
-	jp	z, A_was_0
+	jp	z, A_was_0	; honestly, this should be tested before the routine is called.
 ; PUSH DE
 ; LD   HL,init_g
-	ld	hl, $0101
+	ld	hl, $0101	; first step only needs 2 bytes: 1 for count, 1 for data
 	ld	(GENTMP), hl
 	ld	hl, GENTMP
 ; LD   HL,PMLTTMP
@@ -540,6 +558,7 @@ rsgp_lbl1:
 	call	gf_exp2_noLUT
 ; CALL poly_mult_1x_plus_A
 	call	pmult_x_plus_A_HI
+	; move result from output space to input space
 	pop	hl
 	pop	de
 ; EASIER BUT PROLLY SLOWER
@@ -594,7 +613,7 @@ A_was_0:
 
 ;
 init_g:
-	db	1, 1
+	.db	1, 1
 ; rs_gen_minibuffer:
 ; DB   2,1,1
 ;#SECTION "RSENCODE", CODE
@@ -604,10 +623,10 @@ init_g:
 ;  HL: Ptr to msg_in
 ; Actually, gonna use a name
 ; TODO:RENAME THESE TO MAKE MORE SENSE
-msg_in equ	PLYMLTANS
+msg_in .equ	PLYMLTANS
 ; gen_ptr = PMLTTMP2
-msg_out equ	PMLTTMP2
-gen_ptr equ	GENOUT
+msg_out .equ	PMLTTMP2
+gen_ptr .equ	GENOUT
 rs_encode_msg:
 	or	a
 	scf
@@ -619,7 +638,7 @@ rs_encode_msg:
 	ld	c, a
 	add	a, (hl)
 	jp	c, msg_too_long
-	call	LINE_COUNT
+	;call	LINE_COUNT
 	ld	(msg_out), a
 	ld	de, msg_out + 1
 	inc	hl
@@ -628,9 +647,10 @@ rs_encode_msg:
 ; PUSH HL
 	pop	af
 	ld	de, gen_ptr
-	call	rs_generator_poly
+	CALL rs_g_poly
+	;call	rs_generator_poly
 ; B=0, C=nsym(?)
-	call	LINE_COUNT
+
 ;
 ; LD   A,C
 ; ; PUSH BC ; POP  HL ; BCALL DispHL
@@ -657,8 +677,8 @@ rs_encode_msg:
 ; ; EX   DE,HL
 ; ::...
 	ld	a, (msg_in)
-; DEC  A ;??
-	call	LINE_COUNT
+ 	;DEC  A ;??
+
 	ld	b, a
 	ld	de, msg_out
 rsenc_lbl1:
@@ -704,7 +724,7 @@ rsenc_lbl3:
 	inc	hl
 ; EX   DE,HL
 ; INC  BC;;;;;?????
-	ldir
+	;ldir	;;;;;;;!!!!!!!!! put this back  ; or take it out to see the quotient
 ; POP  AF
 ; ; DEC  A;;;;;?????
 ; LD   HL,msg_out
@@ -722,13 +742,13 @@ msg_too_long:
 	scf
 	ret
 
-WTF:
-	ld	h, 0
-	ld	l, b
-	pop	af
-	B_CALL	_DispHL
-	scf
-	ret
+;WTF:
+;	ld	h, 0
+;	ld	l, b
+;	pop	af
+;	B_CALL(_DispHL)
+;	scf
+;	ret
 
 ;#SECTION "DEBUG", CODE
 
@@ -748,9 +768,10 @@ disp_wrapper:
 	push	bc
 	push	de
 	push	hl
-	B_CALL	_DispHL
+	B_CALL(_DispHL)
 	call	wait
-	B_CALL	_NewLine
+	ld a, ' ' \ bcall(_PutC)
+	;B_CALL(_NewLine)
 	pop	hl
 	pop	de
 	pop	bc
@@ -759,28 +780,6 @@ disp_wrapper:
 
 ;
 ;
-LINE_COUNT:
-	push	af
-	push	bc
-	push	de
-	push	hl
-	ld	hl, LINE_STR
-	B_CALL	_PutS
-	ld	hl, (L_CTR)
-	inc	hl
-	ld	(L_CTR), hl
-	B_CALL	_DispHL
-	B_CALL	_NewLine
-	pop	hl
-	pop	de
-	pop	bc
-	pop	af
-	ret
-
-L_CTR:
-	.dw	0
-LINE_STR:
-	.db	"GOT THIS FAR:", 0
 ;#SECTION "SCRATCH", DATA
 
 ; PUSH BC
@@ -793,3 +792,65 @@ LINE_STR:
 ; ; B0->A
 ;
 ; PUSH AF ; LD   A,C ; LD   C,B ; LD   B,A ; POP  AF
+;;;;;;;;;;:::::::::::::
+
+; INPUTS:
+; A: nsym
+; DE: Ptr to output
+; DESTROYED: all except DE ?
+; Also, I think C=nsym
+rs_g_poly:
+	ld b,a
+	ld a,1
+	ld (de),a
+	inc de
+	ld (de),a
+	dec de
+	ld a,b
+	or	a
+	ret z	;jp	z, A_was_0
+	ex de,hl
+	ld e,1
+rsgp_lbl1a:
+	push bc
+; INPUTS:
+;		E: constant term in the monic binomial multiplicand (1x + E)
+;		HL: pointer to size byte of polynomial (call it g(x))
+; OUTPUTS: At (HL), the product (x+E)*g(x), which is 1 degree greater than g(x).
+; DESTROYED: A, BC, D. Additionally, since this algorithm is in-place, 
+;					   it overwrites the input polynomial at (HL).
+; Highest-degree terms are first. (otherwise interpret this as (E*x+1)*g(x)?)
+inplace_pmult_x_plus_e:	; originally 1x + A
+	inc (hl)		; add 1 to the size of the polynomial
+	ld b,0
+	ld c,(hl)
+	add hl,bc	; HL now pts to 1 past the const term in the existing polynomial
+	ld (hl),b	; b == 0
+	dec c   	; don't use the size byte as a coefficient
+	ld b,c
+lbl_whatever:
+	dec hl
+	push bc
+	ld d,(hl)
+	call gf_mult_noLUT	; C holds product; E preserved, but A=D=junk and B=0
+	ld a,c
+	inc hl
+	xor (hl)
+	ld (hl),a
+	dec hl
+	pop bc
+	djnz lbl_whatever
+	dec hl		; it preserves hl... YES!
+	;ret
+	; E *= 2
+	ld a,e
+	rlca
+	jr	nc, $ + 4
+	xor	$1C
+	ld e,a	
+	pop bc
+	djnz rsgp_lbl1a
+	ex de,hl
+	ret
+;
+
