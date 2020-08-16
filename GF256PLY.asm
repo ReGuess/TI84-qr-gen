@@ -26,7 +26,7 @@ Start:
 
 ;
 test_rsencode:
-	ld	a, 10 ; 17
+	ld	a, 10 ;  17
 ; LD   HL,$08
 ; CALL disp_wrapper
 ; LD   BC,$08
