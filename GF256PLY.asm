@@ -199,47 +199,6 @@ poly_scale_lbl1:
 	djnz	poly_scale_lbl1
 	ret
 
-;#SECTION "QRDATA", DATA
-
-;TEMPBC .equ	saveSScreen
-TEMPBC .equ appBackUpScreen	;;;;;;
-;
-;
-PLYMLTANS .equ	appBackUpScreen+2	;;;;;
-; PMLTTMP = PLYMLTANS+256
-; PMLTTMP2 = PMLTTMP+256
-PMLTTMP .equ	PLYMLTANS + 64; 128
-PMLTTMP2 .equ	PMLTTMP + 64;128
-;
-GENTMP .equ	PMLTTMP2 + 64;128
-; GENTMP = saveSScreen+8
-GENOUT .equ	GENTMP ; + 32 ; 16 ;64;128
-; no longer need GENTMP, since rs_g_poly now uses in-place multiplication
-;
-;
-HELLO_WORLD_1M:
-.db 16, 32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 0,0,0,0,0,0,0,0
-;.db 16
-;.db %00100000, %01011011, %00001011, %01111000, %11010001, %01110010, %11011100
-;.db %01001101, %01000011, %01000000, %11101100, %00010001, %11101100, %00010001
-;.db %11101100, %00010001
-
-DATA:  ; uses the others as a single 30-byte string
-	.db	30
-DATA0:
-	.db	7, 8, 6, 7, 5, 3, 0, 9
-DATA1:
-	.db	4, 1, 2, 3, 4
-DATA2:
-	.db	4, 1, 2, 3, 0
-DATA3:
-	.db	3, 3, 2, 1
-DATA4:
-	.db	1, 1
-DATA5:
-	.db	2, 1, 1
-DATA6:
-	.db	2, 1, 2
 ;#SECTION "GFMULT", CODE
 
 ; INPUTS: D,E: Multiplicands
@@ -900,3 +859,45 @@ lbl_whatever:
 	ret
 ;
 
+
+;#SECTION "QRDATA", DATA
+
+;TEMPBC .equ	saveSScreen
+TEMPBC .equ appBackUpScreen	;;;;;;
+;
+;
+PLYMLTANS .equ	appBackUpScreen+2	;;;;;
+; PMLTTMP = PLYMLTANS+256
+; PMLTTMP2 = PMLTTMP+256
+PMLTTMP .equ	PLYMLTANS + 64; 128
+PMLTTMP2 .equ	PMLTTMP + 64;128
+;
+GENTMP .equ	PMLTTMP2 + 64;128
+; GENTMP = saveSScreen+8
+GENOUT .equ	GENTMP ; + 32 ; 16 ;64;128
+; no longer need GENTMP, since rs_g_poly now uses in-place multiplication
+;
+;
+HELLO_WORLD_1M:
+.db 16, 32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 0,0,0,0,0,0,0,0
+;.db 16
+;.db %00100000, %01011011, %00001011, %01111000, %11010001, %01110010, %11011100
+;.db %01001101, %01000011, %01000000, %11101100, %00010001, %11101100, %00010001
+;.db %11101100, %00010001
+
+DATA:  ; uses the others as a single 30-byte string
+	.db	30
+DATA0:
+	.db	7, 8, 6, 7, 5, 3, 0, 9
+DATA1:
+	.db	4, 1, 2, 3, 4
+DATA2:
+	.db	4, 1, 2, 3, 0
+DATA3:
+	.db	3, 3, 2, 1
+DATA4:
+	.db	1, 1
+DATA5:
+	.db	2, 1, 1
+DATA6:
+	.db	2, 1, 2
