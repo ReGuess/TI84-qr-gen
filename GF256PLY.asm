@@ -45,19 +45,14 @@ Start:
 
 ;
 test_rsencode:
-	ld	a, 10 ;  17
-; LD   HL,$08
-; CALL disp_wrapper
-; LD   BC,$08
+	ld	a, 10 ;  nsym
 	ld	b, 0
 	ld	de, msg_in
 	ld	hl,  HELLO_WORLD_1M ; DATA0
 	ld	c, (hl)
-; EX   DE,HL
 	inc	bc
-	ldir
+	ldir			; put the data hardcoded at (HL) into (DE)
 	ld	hl, msg_in
-; JP   DISP_POLY
 	call	rs_encode_msg
 	ld	hl, msg_out
 	jp	nc, DISP_POLY
@@ -67,7 +62,7 @@ test_rsencode:
 test_rsgp:
 	ld	a, 10
 	ld	de, PLYMLTANS
-	call	rs_g_poly	;call	rs_generator_poly
+	call	rs_g_poly
 	ld	hl, PLYMLTANS
 	jp	DISP_POLY
 
@@ -176,8 +171,7 @@ print_newline:
 
 
 nope:
-; LD   L,B
-; LD   H,0
+; LD   L,B \	 ; LD   H,0
 	B_CALL(_DispHL)
 	ret
 
@@ -289,8 +283,7 @@ gf_exp2_noLUT:
 	ld	a, 1
 	ret	z
 gf_exp2_lbl1:
-; CALL gf_mult_by_2
-; Inlined below:
+; CALL gf_mult_by_2 ; Inlined below:
 	rlca
 	jr	nc, $ + 4
 	xor	$1C
