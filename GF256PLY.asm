@@ -4,6 +4,27 @@
 #include "ti83plus.inc"
 .list
 
+;TEMPBC .equ	saveSScreen
+TEMPBC .equ appBackUpScreen	;;;;;;
+;
+;
+PLYMLTANS .equ	appBackUpScreen+2	;;;;;
+; PMLTTMP = PLYMLTANS+256
+; PMLTTMP2 = PMLTTMP+256
+PMLTTMP .equ	PLYMLTANS + 64; 128
+PMLTTMP2 .equ	PMLTTMP + 64;128
+;
+GENTMP .equ	PMLTTMP2 + 64;128
+; GENTMP = saveSScreen+8
+GENOUT .equ	GENTMP ; + 32 ; 16 ;64;128
+; no longer need GENTMP, since rs_g_poly now uses in-place multiplication
+;
+msg_in .equ	PLYMLTANS
+; gen_ptr = PMLTTMP2
+msg_out .equ	PMLTTMP2
+gen_ptr .equ	GENOUT
+
+
 	.org	userMem-2
 	.db	$BB, $6D
 Start:
@@ -412,10 +433,6 @@ pmltLbl2:
 ;  HL: Ptr to msg_in
 ; Actually, gonna use a name
 ; TODO:RENAME THESE TO MAKE MORE SENSE
-msg_in .equ	PLYMLTANS
-; gen_ptr = PMLTTMP2
-msg_out .equ	PMLTTMP2
-gen_ptr .equ	GENOUT
 rs_encode_msg:
 	or	a
 	scf
@@ -692,21 +709,6 @@ lbl_whatever:
 
 ;#SECTION "QRDATA", DATA
 
-;TEMPBC .equ	saveSScreen
-TEMPBC .equ appBackUpScreen	;;;;;;
-;
-;
-PLYMLTANS .equ	appBackUpScreen+2	;;;;;
-; PMLTTMP = PLYMLTANS+256
-; PMLTTMP2 = PMLTTMP+256
-PMLTTMP .equ	PLYMLTANS + 64; 128
-PMLTTMP2 .equ	PMLTTMP + 64;128
-;
-GENTMP .equ	PMLTTMP2 + 64;128
-; GENTMP = saveSScreen+8
-GENOUT .equ	GENTMP ; + 32 ; 16 ;64;128
-; no longer need GENTMP, since rs_g_poly now uses in-place multiplication
-;
 ;
 HELLO_WORLD_1M:
 .db 16, 32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 0,0,0,0,0,0,0,0
