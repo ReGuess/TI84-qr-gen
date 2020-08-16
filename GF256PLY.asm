@@ -635,10 +635,10 @@ rs_encode_msg:
 	push	af
 	ld	hl, msg_in
 	ld	b, 0
-	ld	c, a
 	add	a, (hl)
+	ld	c, a
 	jp	c, msg_too_long
-	;call	LINE_COUNT
+	
 	ld	(msg_out), a
 	ld	de, msg_out + 1
 	inc	hl
