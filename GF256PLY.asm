@@ -4,11 +4,11 @@
 #include "ti83plus.inc"
 .list
 
-;TEMPBC .equ	saveSScreen
-TEMPBC .equ appBackUpScreen	;;;;;;
+TEMPBC .equ	saveSScreen
+;TEMPBC .equ appBackUpScreen	;;;;;;
 ;
 ;
-PLYMLTANS .equ	appBackUpScreen+2	;;;;;
+PLYMLTANS .equ	appBackUpScreen	;+2	;;;;;
 ; PMLTTMP = PLYMLTANS+256
 ; PMLTTMP2 = PMLTTMP+256
 PMLTTMP .equ	PLYMLTANS + 64; 128
