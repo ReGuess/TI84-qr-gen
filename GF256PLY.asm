@@ -780,6 +780,50 @@ disp_wrapper:
 	pop	af
 	ret
 
+append_poly_to_list:
+	ld b,(hl)
+append_loop:
+	push bc
+	push hl
+	ld hl, L1Name
+	rst rMov9ToOP1
+	rst rFindSym
+	jp c,	L1undefined
+	
+	ld a,b
+	or a
+	jp nz, errArchived
+	ld a, ListObj
+	bcall(_IncLstSize)
+	pop bc
+	;;;;;;;;;inc bc
+	push bc
+	push de
+	push hl
+	ld a,(bc)
+	ld h,0
+	ld l,a
+	bcall(_SetXXXXOP2)
+	bcall(_Op2ToOp1)
+	pop hl
+	pop de
+	bcall(_PutToL)
+	pop hl
+	inc hl	;;;;;;;;;
+	pop bc
+	djnz	append_loop
+	ret
+errArchived:
+L1undefined:
+	pop hl
+	pop bc
+	ret
+L1Name:
+.db	ListObj,tVarLst,tL1,0,0 
+
+
+
+
 ;
 ;
 ;#SECTION "SCRATCH", DATA
