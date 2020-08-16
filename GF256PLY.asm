@@ -579,6 +579,8 @@ disp_wrapper:
 	pop	af
 	ret
 
+; Appends the polynomial at (HL) to the end of L1
+; INPUTS:	HL: Pointer to polynomial
 append_poly_to_list:
 	ld b,(hl)
 append_loop:
@@ -591,7 +593,7 @@ append_loop:
 	
 	ld a,b
 	or a
-	jp nz, errArchived
+	jp nz, L1archived
 	ld a, ListObj
 	bcall(_IncLstSize)
 	pop bc
@@ -612,15 +614,81 @@ append_loop:
 	pop bc
 	djnz	append_loop
 	ret
-errArchived:
+L1archived:
 L1undefined:
 	pop hl
 	pop bc
 	ret
+
+
+; INPUTS:	DE: polynomial destination
+list_to_poly:
+	RET			; DON'T USE THIS YET
+	push de
+	ld hl, L2Name
+	rst rMov9ToOP1
+	rst rFindSym
+	jp c,	L2undefined
+	ld a,b
+	or a
+	jp nz, L2archived
+	push de
+	ld hl, $0001
+	;push hl
+	bcall(_GetLToOP1)
+	bcall(_ConvOP1)		; A = LSB hex value; DE = entire hex value
+	;pop hl
+	pop bc	;pointer to start of list's data storage
+	pop de	;pointer to polynomial
+	push de
+	inc de
+	ld (de),a
+	ld a,(bc)
+	dec de
+	ld (de),a
+	
+	
+	
+	ld a, ListObj
+	
+	
+	
+	ld b,(hl)
+list_loop:
+	push bc
+	push hl
+
+	bcall(_IncLstSize)
+	pop bc
+	inc bc	;;;;;;;;; comment this out to include the size byte
+	push bc
+	push de
+	push hl
+	ld a,(bc)
+	ld h,0
+	ld l,a
+	bcall(_SetXXXXOP2)
+	bcall(_Op2ToOp1)
+	pop hl
+	pop de
+	bcall(_PutToL)
+	pop hl
+	;inc hl	;;;;;;;;; uncomment this if excluding size byte
+	pop bc
+	djnz	list_loop
+	ret
+L2archived:
+L2undefined:
+	pop hl
+	pop bc
+	ret
+
+
 L1Name:
-.db	ListObj,tVarLst,tL1,0,0 
+.db	ListObj,tVarLst,tL1,0,0
 
-
+L2Name:
+.db	ListObj,tVarLst,tL2,0,0
 
 
 ;
