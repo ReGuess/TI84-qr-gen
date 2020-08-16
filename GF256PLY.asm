@@ -632,23 +632,25 @@ rs_encode_msg:
 	scf
 	ret	z
 ;
-	push	af
+	push	af		; save nsym
+	
 	ld	hl, msg_in
+	add	a, (hl)		; A = nsym + size(msg_in)
+	jp	c, msg_too_long	; if A > 255, that's too big
+
 	ld	b, 0
-	add	a, (hl)
-	ld	c, a
-	jp	c, msg_too_long
+	ld	c, (hl)		; size(msg_in) -> C
 	
 	ld	(msg_out), a
 	ld	de, msg_out + 1
 	inc	hl
 	ldir
-; LD   A,B
-; PUSH HL
-	pop	af
+
+
+	pop	af		; retrieve nsym
 	ld	de, gen_ptr
-	CALL rs_g_poly
-	;call	rs_generator_poly
+	call	rs_g_poly
+
 ; B=0, C=nsym(?)
 
 ;
