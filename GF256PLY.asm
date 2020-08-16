@@ -55,7 +55,7 @@ test_rsencode:
 	ld	hl, msg_in
 	call	rs_encode_msg
 	ld	hl, msg_out
-	jp	nc, DISP_POLY
+	jp	nc, append_poly_to_list		;jp	nc, DISP_POLY
 	ret
 
 
@@ -595,7 +595,7 @@ append_loop:
 	ld a, ListObj
 	bcall(_IncLstSize)
 	pop bc
-	;;;;;;;;;inc bc
+	inc bc	;;;;;;;;; comment this out to include the size byte
 	push bc
 	push de
 	push hl
@@ -608,7 +608,7 @@ append_loop:
 	pop de
 	bcall(_PutToL)
 	pop hl
-	inc hl	;;;;;;;;;
+	;inc hl	;;;;;;;;; uncomment this if excluding size byte
 	pop bc
 	djnz	append_loop
 	ret
