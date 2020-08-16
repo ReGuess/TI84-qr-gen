@@ -141,10 +141,14 @@ LBL01:
 	inc	hl
 	push hl
 	push bc
+	xor a
 	ld	l, (hl)
-	ld	h, 0
+	ld	h, a
+	cp l
+	call z, print_a_space
+	jr z,ughhh
 	bcall(_DispHL)
-	call	wait
+ughhh:
 	pop bc
 	bit 0,c
 	call z,print_a_space
@@ -159,9 +163,11 @@ print_a_space:
 	ret
 print_newline:
 	push bc
+	call	wait
 	bcall(_NewLine)
 	pop bc
 	ret
+
 
 nope:
 ; LD   L,B
