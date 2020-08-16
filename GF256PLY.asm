@@ -13,10 +13,8 @@ Start:
 	ld	(hl), a
 	ld	bc, $0300
 	ldir
-; CALL LINE_COUNT
 	call	test_rsencode
  ;CALL test_rsgp
-; CALL test_pmxpa
 ; CALL test_gf_pow
 ;; CALL test_poly_add
 ; CALL test_poly_mult
@@ -44,28 +42,15 @@ test_rsencode:
 	jp	nc, DISP_POLY
 	ret
 
-;
+
 test_rsgp:
 	ld	a, 10
 	ld	de, PLYMLTANS
-	call	rs_generator_poly
+	call	rs_g_poly	;call	rs_generator_poly
 	ld	hl, PLYMLTANS
 	jp	DISP_POLY
 
-;
-test_pmxpa:
-	ld	a, 3
-; LD   HL,init_g
-	ld	hl, DATA6
-	ld	de, PLYMLTANS
-; CALL poly_mult_1x_plus_A
-	call	pmult_x_plus_A_HI
-; RET
-	ld	hl, PLYMLTANS
-	jp	DISP_POLY
 
-;
-;
 test_gf_pow:
 	ld	hl, $0245
 	call	gf_pow_noLUT
@@ -419,168 +404,7 @@ pmltLbl2:
 	djnz	pmltLbl1
 	ret
 
-;#SECTION "PMUL1XPA", CODE
 
-; INPUTS:
-; HL: Ptr to 1st multiplicand
-; A: Const term of 2nd multiplicand
-; DE: Ptr to Output
-; DESTROYED: ALL
-; NOTE: Lowest-degree
-;   terms come 1st
-poly_mult_1x_plus_A:
-; Mult by A
-	push	hl
-; NEXT LINE IS FOR SWITCHIG COEFF ORDER
-; INC  DE
-;
-	push	de
-	call	poly_scale
-; might need INC  HL here?
-; B=0
-	ld	(hl), b
-;
-; Mult by 1X
-	pop	hl
-; LD   (HL),B ; DEC  HL
-; size byte of DEstination
-	inc	(hl)
-	ex	de, hl
-	pop	hl
-;
-	ld	b, (hl)
-; This would be the perfect place for a macro
-	inc	de
-pmxpa_lbl1:
-	inc	de
-	inc	hl
-	ld	a, (de)
-; CALL disp_wrapper
-	xor	(hl)
-	ld	(de), a
-	djnz	pmxpa_lbl1
-	ret
-
-;#SECTION "XPLSAREV", CODE
-
-; INPUTS:
-; HL: Ptr to 1st multiplicand
-; A: Const term of 2nd multiplicand
-; DE: Ptr to Output
-; DESTROYED: ALL
-; NOTE: Highest-degree terms come 1st
-pmult_x_plus_A_HI:
-	push	hl
-	inc	de
-	push	de
-	call	poly_scale
-; LD   (HL),B
-	pop	hl
-; CALL disp_wrapper
-	ld	c, (hl)
-	ld	(hl), b
-	dec	hl
-	inc	c
-	ld	(hl), c
-; INC  (HL)
-	ex	de, hl
-	pop	hl
-	ld	b, (hl)
-xpa_rev_lbl1:
-	inc	de
-	inc	hl
-	ld	a, (de)
-	xor	(hl)
-	ld	(de), a
-	djnz	xpa_rev_lbl1
-	ret
-
-;#SECTION "RSGENPLY", CODE
-
-; INPUTS:
-; A: nsym
-; DE: Ptr to output
-; DESTROYED: all except DE ?
-; Also, I think C=nsym
-rs_generator_poly:	; OBSOLETE?
-	JP rs_g_poly	; jump directly to new version
-	;
-	or	a
-	jp	z, A_was_0	; honestly, this should be tested before the routine is called.
-; PUSH DE
-; LD   HL,init_g
-	ld	hl, $0101	; first step only needs 2 bytes: 1 for count, 1 for data
-	ld	(GENTMP), hl
-	ld	hl, GENTMP
-; LD   HL,PMLTTMP
-	ld	c, 0
-	ld	b, a
-rsgp_lbl1:
-	push	bc
-	push	de
-	push	hl
-	ld	b, c
-	call	gf_exp2_noLUT
-; CALL poly_mult_1x_plus_A
-	call	pmult_x_plus_A_HI
-	; move result from output space to input space
-	pop	hl
-	pop	de
-; EASIER BUT PROLLY SLOWER
-	push	de
-	push	hl
-	ex	de, hl
-; TODO: clean this up
-	ld	c, (hl)
-	ld	b, 0
-	inc	bc
-	ldir
-	pop	hl
-	pop	de
-	pop	bc
-	inc	c
-	djnz	rsgp_lbl1
-	ret
-
-; This could prolly be done w/
-; a parity check on C instead
-; (Or just put the exchange inside the loop :p)
-; POP  BC
-; LD   A,D
-; CP   B
-; JR   NZ,rsgp_lbl2
-; LD   A,E
-; CP   C
-; RET  Z
-; rsgp_lbl2:
-; We had an [even/odd] number of iterations,
-; So we need to put the result where it's expected
-; [BC=HL, not DE]
-; PUSH BC
-; POP  DE
-; LD   C,(HL)
-; LD   B,0
-; INC  BC
-; LDIR
-;
-; RET
-;
-A_was_0:
-	inc	a
-	ld	(de), a
-	inc	de
-	ld	(de), a
-	xor	a
-	ld	b, a
-	ld	c, a
-; In case the effect is wanted
-	ret
-
-;
-init_g:
-	.db	1, 1
-; rs_gen_minibuffer:
-; DB   2,1,1
 ;#SECTION "RSENCODE", CODE
 
 ; INPUTS:
