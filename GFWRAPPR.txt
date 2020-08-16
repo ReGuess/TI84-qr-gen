@@ -1,0 +1,3 @@
+{0->L1
+Asm(prgmGF256PLY
+DeltaList(cumSum(L1->L1
