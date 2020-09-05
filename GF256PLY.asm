@@ -580,7 +580,7 @@ rsenc_lbl3:
 	inc	hl
 ; EX   DE,HL
 ; INC  BC;;;;;?????
-	;ldir	;;;;;;;!!!!!!!!! put this back  ; or take it out to see the quotient
+	ldir	;;;;;;;!!!!!!!!! put this back  ; or take it out to see the quotient
 ; POP  AF
 ; ; DEC  A;;;;;?????
 ; LD   HL,msg_out
