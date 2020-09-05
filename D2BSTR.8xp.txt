@@ -1,0 +1,38 @@
+If 0:"//This could easily be in-lined. There's also optimizations to be made in QRZMAIN w.r.t. reused code.
+
+".->Str9
+M-N->O
+dim(L4->D
+For(J,1,D-O
+	L4(J->A
+	"B
+	For(I,1,11
+		sub("01",1+int(2fPart(A/2^I)),1)+Ans
+	End
+	While 12>length(Ans
+		"0"+Ans
+		Disp "SHOULDNT NEED
+	End
+	sub(Ans,1,11
+	Disp Ans
+	Str9+Ans->Str9
+End
+
+If O:Then
+	L4(dim(L4->A
+	"B
+	For(I,1,6
+		sub("01",1+int(2fPart(A/2^I)),1)+Ans
+	End
+	sub(Ans,1,6
+	Disp Ans
+	Str9+Ans->Str9
+End
+sub(Str9,2,length(Str9)-1->Str9
+
+9+2(V>9->D
+"B
+For(I,1,D
+	sub("01",1+int(2fPart(N/2^I)),1)+Ans
+End
+"0010"+sub(Ans,1,D)+Str9

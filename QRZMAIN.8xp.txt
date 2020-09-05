@@ -1,0 +1,88 @@
+Ans->Str1
+length(Ans->N
+1->V:2->X
+V:Asm(prgmECCTBL
+
+"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ theta?*+-./:"->Str0
+
+{1
+For(I,1,N
+	augment(Ans,{inString(Str0,sub(Str1,I,1
+End
+DeltaList(cumSum(Ans-1->L1
+
+If sum(Ans<0
+Then
+	prgmBYTEMODE
+Else
+	
+	If sum(Ans>9
+	Then
+		If 0:"ALPHANUM
+		
+		1+44seq(remainder(J,2),J,1,N->L2
+		1->L2(N
+		N+remainder(N,2->M
+		Ans->dim(L2
+		Ans->dim(L1
+		L1L2
+		seq(Ans(I),I,1,M,2)+seq(Ans(I),I,2,M,2->L4
+		
+		prgmD2BSTR
+		Pause Ans
+		Ans->Str9
+	Else
+		
+		Pause Ans
+		If 0:123
+		
+		Pause seq(expr(sub(Str1,I,min(3,N-I+1))),I,1,N,3
+		Ans->L1
+		~int(~int(1+log(Ans))/log(2->L2
+		
+		dim(Ans->D
+		".->Str9
+		For(J,1,D
+			L1(J->A
+			L2(J->B
+			"B
+			For(I,1,B
+				sub("01",1+int(2fPart(A/2^I)),1)+Ans
+			End
+			sub(Ans,1,B
+			Disp Ans
+			Str9+Ans->Str9
+		End
+		
+		sub(Str9,2,length(Str9)-1->Str9
+		
+		10+2(V>9->D
+		"B
+		For(I,1,D
+			sub("01",1+int(2fPart(N/2^I)),1)+Ans
+		End
+		"0001"+sub(Ans,1,D)+Str9->Str9
+		
+		
+	End
+End
+
+
+Pause {8theta,length(Str9
+Str9
+For(I,1,min(4,8theta-length(Str9
+	Ans+"0
+End
+While remainder(length(Ans),8
+	Ans+"0
+End
+Ans->Str9
+If 0:"GUARANTEED MULTIPLE OF 8 NOW. USE OPPORTUNITY TO CONVERT TO HEX
+
+prgmBIN2HEX
+While 2theta>length(Str8
+	Str8+"EC->Str8
+	If 2theta>length(Str8
+	Str8+"11->Str8
+End
+Ans
