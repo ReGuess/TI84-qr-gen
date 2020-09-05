@@ -34,16 +34,25 @@ Start:
 	ld	(hl), a
 	ld	bc, $0300
 	ldir
-	call	test_rsencode
- ;CALL test_rsgp
-; CALL test_gf_pow
-;; CALL test_poly_add
-; CALL test_poly_mult
-; CALL test_gf_mult
-; CALL test_poly_scale
+	call	test_read_hex
+	;call	test_rsencode
+	;call test_rsgp
+	;call test_gf_pow
+	;; CALL test_poly_add
+	;call test_poly_mult
+	;call test_gf_mult
+	;call test_poly_scale
 	ret
 
-;
+test_read_hex:
+	call	read_hex_string
+	ld	hl, msg_in
+	call	rs_encode_msg
+	ld	hl, msg_out
+	jp	nc, DISP_POLY
+	ret
+
+
 test_rsencode:
 	ld	a, 10 ;  nsym
 	ld	b, 0
@@ -174,6 +183,52 @@ nope:
 ; LD   L,B \	 ; LD   H,0
 	B_CALL(_DispHL)
 	ret
+
+
+
+;#SECTION "RDHEXSTR", CODE
+
+read_hex_string:
+	ld	hl, Str8name
+	rst	rMOV9TOOP1
+	rst	rFINDSYM
+	ret	c
+	ld	a, b
+	or	a
+	ret	nz
+	ex	de, hl
+	ld	a, (hl)
+	ld	b, a
+	ld	de, msg_in
+	rrca			; divide by 2
+	ld	(de), a
+	inc	hl
+rd_hex_loop:
+	inc	hl
+	ld	a, (hl)
+	sub	48
+	cp	17
+	jr	c, less_than_10
+	sub	7
+less_than_10:
+	bit	0, b
+	jr	nz, odd_counter
+	rlca
+	rlca
+	rlca
+	rlca
+	ld	c, a
+	djnz	rd_hex_loop
+	ret	; This line should never run, assuming well-formed input
+odd_counter:
+	inc	de
+	add	a, c
+	ld	(de), a
+	djnz	rd_hex_loop
+	ret
+
+Str8name:
+	.db	StrngObj, 0AAh, 7, 0, 0
 
 ;#SECTION "PLYSCALE", CODE
 
