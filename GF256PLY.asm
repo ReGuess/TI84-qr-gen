@@ -228,7 +228,7 @@ odd_counter:
 	ret
 
 Str8name:
-	.db	StrngObj, 0AAh, 7, 0, 0
+	.db	StrngObj, tVarStrng, tStr8, 0, 0
 
 ;#SECTION "PLYSCALE", CODE
 
