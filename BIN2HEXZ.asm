@@ -7,7 +7,7 @@
 	.org	userMem - 2
 	.db	$BB, $6D
 Start:
-	ld	hl, Str8name
+	ld	hl, Str9name
 	rst	rMOV9TOOP1
 	rst	rFINDSYM
 	ret	c
@@ -112,5 +112,5 @@ TODO2:
 	ret
 
 
-Str8name:
-	.db	StrngObj, tVarStrng, tStr8, 0, 0
+Str9name:
+	.db	StrngObj, tVarStrng, tStr9, 0, 0

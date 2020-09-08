@@ -111,11 +111,11 @@ While remainder(length(Ans),8
 End
 Ans->Str9
 If 0:"GUARANTEED MULTIPLE OF 8 NOW. USE OPPORTUNITY TO CONVERT TO HEX
-Str9->Str8
+
 Asm(prgmBIN2HEXZ
-While 2theta>length(Str8
-	Str8+"EC->Str8
-	If 2theta>length(Str8
-	Ans+"11->Str8
+While 2theta>length(Str9
+	Str9+"EC->Str9
+	If 2theta>length(Str9
+	Ans+"11->Str9
 End
-Str8
+Str9
