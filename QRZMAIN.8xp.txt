@@ -22,7 +22,8 @@ Else
 		
 		1+44seq(remainder(J,2),J,1,N->L2
 		1->L2(N
-		N+remainder(N,2->M
+		remainder(N,2->O
+		N+O->M
 		Ans->dim(L2
 		Ans->dim(L1
 		L1L2
@@ -30,7 +31,6 @@ Else
 		
 If 0:"//////////////////////////////////////////////////		prgmD2BSTR, inlined
 		".->Str9
-		M-N->O
 		dim(L4->D
 		For(J,1,D-O
 			L4(J->A
