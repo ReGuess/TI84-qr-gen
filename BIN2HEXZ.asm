@@ -1,7 +1,11 @@
+.nolist
+#include "ti83plus.inc"
+.list
+
 ;#SECTION "MAIN", CODE
 
-	org	userMem - 2
-	db	$BB, $6D
+	.org	userMem - 2
+	.db	$BB, $6D
 Start:
 	ld	hl, Str8name
 	rst	rMOV9TOOP1
@@ -109,4 +113,4 @@ TODO2:
 
 
 Str8name:
-	db	StrngObj, $AA, 7, 0, 0
+	.db	StrngObj, tVarStrng, tStr8, 0, 0

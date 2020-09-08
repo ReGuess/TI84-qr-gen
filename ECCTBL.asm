@@ -1,3 +1,7 @@
+.nolist
+#include "ti83plus.inc"
+.list
+
 ;#SECTION "MAIN", CODE
 
 	.org	userMem - 2
