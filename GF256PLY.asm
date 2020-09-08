@@ -618,7 +618,7 @@ waitLoop:
 	jr	z, waitLoop
 	ret
 
-;
+
 disp_wrapper:
 	push	af
 	push	bc
@@ -634,6 +634,8 @@ disp_wrapper:
 	pop	af
 	ret
 
+; Appends the polynomial at (HL) to the end of L1
+; INPUTS:       HL: Pointer to polynomial
 append_poly_to_list:
 	ld b,(hl)
 append_loop:

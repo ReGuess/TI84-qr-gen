@@ -29,15 +29,15 @@ Else
 		seq(Ans(I),I,1,M,2)+seq(Ans(I),I,2,M,2->L4
 		
 		prgmD2BSTR
-		Pause Ans
+		Disp Ans
 		Ans->Str9
 	Else
 		
-		Pause Ans
+		Disp Ans
 		If 0:123
 		
-		Pause seq(expr(sub(Str1,I,min(3,N-I+1))),I,1,N,3
-		Ans->L1
+		seq(expr(sub(Str1,I,min(3,N-I+1))),I,1,N,3->L1
+		Disp Ans
 		~int(~int(1+log(Ans))/log(2->L2
 		
 		dim(Ans->D
@@ -67,8 +67,8 @@ Else
 	End
 End
 
+Disp {8theta,length(Str9
 
-Pause {8theta,length(Str9
 Str9
 For(I,1,min(4,8theta-length(Str9
 	Ans+"0
@@ -77,12 +77,12 @@ While remainder(length(Ans),8
 	Ans+"0
 End
 Ans->Str9
-If 0:"GUARANTEED MULTIPLE OF 8 NOW. USE OPPORTUNITY TO CONVERT TO HEX
-
-prgmBIN2HEX
+If 0:"GUARANTEED MULTIPLE OF 8 NOW. USE OPPERTUNITY TO CONVERT TO HEX
+Str9->Str8
+Asm(prgmBIN2HEXZ
 While 2theta>length(Str8
 	Str8+"EC->Str8
 	If 2theta>length(Str8
-	Str8+"11->Str8
+	Ans+"11->Str8
 End
-Ans
+Str8
