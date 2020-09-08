@@ -28,7 +28,44 @@ Else
 		L1L2
 		seq(Ans(I),I,1,M,2)+seq(Ans(I),I,2,M,2->L4
 		
-		prgmD2BSTR
+If 0:"//////////////////////////////////////////////////		prgmD2BSTR, inlined
+		".->Str9
+		M-N->O
+		dim(L4->D
+		For(J,1,D-O
+			L4(J->A
+			"B
+			For(I,1,11
+				sub("01",1+int(2fPart(A/2^I)),1)+Ans
+			End
+			While 12>length(Ans
+				"0"+Ans
+				Disp "SHOULDNT NEED
+			End
+			sub(Ans,1,11
+			Disp Ans
+			Str9+Ans->Str9
+		End
+		
+		If O:Then
+			L4(dim(L4->A
+			"B
+			For(I,1,6
+				sub("01",1+int(2fPart(A/2^I)),1)+Ans
+			End
+			sub(Ans,1,6
+			Disp Ans
+			Str9+Ans->Str9
+		End
+		sub(Str9,2,length(Str9)-1->Str9
+		
+		9+2(V>9->D
+		"B
+		For(I,1,D
+			sub("01",1+int(2fPart(N/2^I)),1)+Ans
+		End
+		"0010"+sub(Ans,1,D)+Str9
+If 0:"//////////////////////////////////////////////////
 		Disp Ans
 		Ans->Str9
 	Else
