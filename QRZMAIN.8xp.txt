@@ -38,10 +38,6 @@ If 0:"//////////////////////////////////////////////////		prgmD2BSTR, inlined
 			For(I,1,11
 				sub("01",1+int(2fPart(A/2^I)),1)+Ans
 			End
-			While 12>length(Ans
-				"0"+Ans
-				Disp "SHOULDNT NEED
-			End
 			sub(Ans,1,11
 			Disp Ans
 			Str9+Ans->Str9
