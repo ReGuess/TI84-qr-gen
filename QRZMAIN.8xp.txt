@@ -29,7 +29,6 @@ Else
 		L1L2
 		seq(Ans(I),I,1,M,2)+seq(Ans(I),I,2,M,2->L4
 		
-If 0:"//////////////////////////////////////////////////		prgmD2BSTR, inlined
 		".->Str9
 		dim(L4->D
 		11->B
@@ -52,7 +51,7 @@ If 0:"//////////////////////////////////////////////////		prgmD2BSTR, inlined
 		9+2(V>9->B
 		prgmREAL2BIN
 		"0010"+Ans+Str9->Str9
-If 0:"//////////////////////////////////////////////////
+
 		Disp Ans
 	Else
 		Disp Ans
