@@ -1,0 +1,5 @@
+"B
+For(I,1,B
+	sub("01",1+int(2fPart(A/2^I)),1)+Ans
+End
+sub(Ans,1,B

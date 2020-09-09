@@ -32,40 +32,29 @@ Else
 If 0:"//////////////////////////////////////////////////		prgmD2BSTR, inlined
 		".->Str9
 		dim(L4->D
+		11->B
 		For(J,1,D-O
 			L4(J->A
-			"B
-			For(I,1,11
-				sub("01",1+int(2fPart(A/2^I)),1)+Ans
-			End
-			sub(Ans,1,11
+			prgmREAL2BIN
 			Disp Ans
 			Str9+Ans->Str9
 		End
 		
 		If O:Then
-			L4(dim(L4->A
-			"B
-			For(I,1,6
-				sub("01",1+int(2fPart(A/2^I)),1)+Ans
-			End
-			sub(Ans,1,6
+			L4(D->A
+			6->B
+			prgmREAL2BIN
 			Disp Ans
 			Str9+Ans->Str9
 		End
 		sub(Str9,2,length(Str9)-1->Str9
-		
-		9+2(V>9->D
-		"B
-		For(I,1,D
-			sub("01",1+int(2fPart(N/2^I)),1)+Ans
-		End
-		"0010"+sub(Ans,1,D)+Str9
+		N->A
+		9+2(V>9->B
+		prgmREAL2BIN
+		"0010"+Ans+Str9->Str9
 If 0:"//////////////////////////////////////////////////
 		Disp Ans
-		Ans->Str9
 	Else
-		
 		Disp Ans
 		If 0:123
 		
@@ -78,25 +67,15 @@ If 0:"//////////////////////////////////////////////////
 		For(J,1,D
 			L1(J->A
 			L2(J->B
-			"B
-			For(I,1,B
-				sub("01",1+int(2fPart(A/2^I)),1)+Ans
-			End
-			sub(Ans,1,B
+			prgmREAL2BIN
 			Disp Ans
 			Str9+Ans->Str9
 		End
-		
 		sub(Str9,2,length(Str9)-1->Str9
-		
-		10+2(V>9->D
-		"B
-		For(I,1,D
-			sub("01",1+int(2fPart(N/2^I)),1)+Ans
-		End
-		"0001"+sub(Ans,1,D)+Str9->Str9
-		
-		
+		N->A
+		10+2(V>9->B
+		prgmREAL2BIN
+		"0001"+Ans+Str9->Str9
 	End
 End
 
