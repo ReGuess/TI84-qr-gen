@@ -1,0 +1,16 @@
+10^(1+int(log(Ans
+-int(-log(Ans)/log(2
+
+
+-int(-log(10^(1+int(log(Ans))))/log(2))
+
+-int(-log(10^(
+    1+int(log(Ans))
+    ))
+/log(2))
+
+
+log(10^(1+int(log(Ans)))) == (1+int(log(Ans))) == int(1+log(Ans))
+
+-int(-log(10^(1+int(log(Ans))))/log(2))
+== -int(-int(1+log(Ans))/log(2))
