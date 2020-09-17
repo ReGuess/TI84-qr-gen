@@ -2,9 +2,9 @@ If 0:"//This could easily be in-lined. There's also optimizations to be made in 
 
 ".->Str9
 M-N->O
-dim(L4->D
+dim(L₄->D
 For(J,1,D-O
-	L4(J->A
+	L₄(J->A
 	"B
 	For(I,1,11
 		sub("01",1+int(2fPart(A/2^I)),1)+Ans
@@ -19,7 +19,7 @@ For(J,1,D-O
 End
 
 If O:Then
-	L4(dim(L4->A
+	L₄(dim(L₄->A
 	"B
 	For(I,1,6
 		sub("01",1+int(2fPart(A/2^I)),1)+Ans
