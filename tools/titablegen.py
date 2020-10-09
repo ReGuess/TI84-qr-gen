@@ -1,5 +1,5 @@
-#!/usr/bin/env python  
-import xml.etree.ElementTree as ET  
+#!/usr/bin/env python
+import xml.etree.ElementTree as ET
 import sys
 
 import re
@@ -44,7 +44,7 @@ def emit_token(string,tokbytes,raw_mode=False,rootattrs=None):
 		string = cleanup_chars(string)
 	string = "".join([i for i in ['"',string.replace('"',r'\"'),'"'] if quotes or i!='"'])
 	return (tlen,string,tokbytes,rootattrs) if raw_mode else ((tlen,'%s\t{\treturn 0x%X;\t}' % (string, concatenate_bytes(tokbytes))))
-		
+
 def add_all_tokens(down_from,tokens,byte_prefix,raw_mode=False):
 	for token in down_from.findall("{http://merthsoft.com/Tokens}Token"):
 		bp=byte_prefix+[get_byte(token.attrib)]
@@ -55,8 +55,8 @@ def add_all_tokens(down_from,tokens,byte_prefix,raw_mode=False):
 		tokens = add_all_tokens(token,tokens,bp,raw_mode=raw_mode)
 	return tokens
 
-def getET(filename):	
-	ET.register_namespace("","http://merthsoft.com/Tokens")  
+def getET(filename):
+	ET.register_namespace("","http://merthsoft.com/Tokens")
 	return ET.parse(filename).getroot()
 
 def classify(tokens,vim=False):
@@ -200,9 +200,6 @@ if __name__ == '__main__':
 	print "%}"
 	print "%option noyywrap"
 	print "%option yylineno"
-	print "ALPHANUM	[A-Z0-9]|theta"
-	#print "%s PRGMID	prgm([A-Z]|theta)([A-Z0-9]|theta)*"
-	print "%s PRGMNAME"
 	print "%%"
 	print r"[\t]+"	# eat tabs
 	tokens = add_all_tokens(root,[(0,'.\tfprintf(stderr,"Skipping Unknown Character\\n");'),(512,r'^\/\/[^\r\n]+(\n|\r\n?) /* Eat comment */;')],[])
@@ -213,7 +210,7 @@ if __name__ == '__main__':
 			print pattern
 		except UnicodeEncodeError:
 			print "eek",repr(pattern)
-		
+
 	print "%%"
 	print r"""// We'll want to disaggregate our bytes
 // for additional context when parsing
@@ -228,14 +225,14 @@ unsigned int illog(unsigned long l)
 					(!!(l & ((long)0xFF << 40)) << 5) +
 					(!!(l & ((long)0xFF << 48)) << 6) +
 					(!!(l & ((long)0xFF << 56)) << 7);
-					
+
 	register unsigned int r; // result of log2(v) will go here
 	register unsigned int shift;
-	r = (v > 0xF   ) << 2;		v >>= r; 
+	r = (v > 0xF   ) << 2;		v >>= r;
 	shift = (v > 0x3   ) << 1;	v >>= shift;	r |= shift;
 												r |= (v >> 1);
 	return r;
-	
+
 }
 
 unsigned short yylex(void){
@@ -267,16 +264,16 @@ int main(int argc,const char * args[])
 
 	int insize;
 	int outsize=0;
-	
+
 	unsigned char * input = NULL;
 	unsigned char * output = NULL;
-	
+
 	unsigned short next;
 	retval = -1;
 	switch(argc){
 		case 3:
 			printf("%s : %s -> %s\n",args[0],args[1],args[2]);
-		
+
 			if(!(fin = fopen(args[1],"r"))){
 				printf("Couldn't open input file\n");
 				break;
@@ -296,12 +293,12 @@ int main(int argc,const char * args[])
 			}
 			fread(input,sizeof(unsigned char),insize,fin);
 			fclose(fin);
-			
+
 			if(!(fout = fopen(args[2],"wb"))){
 				printf("Couldn't open output file\n");
 				break;
 			}
-			
+
 			yy_scan_string(input);
 			while((next=yylex())!=tEOF){
 				output[(outsize++)%insize] = (unsigned char)next; // tEOF is the only multibyte token to be returned
@@ -309,14 +306,14 @@ int main(int argc,const char * args[])
 			}
 			if(outsize % insize) fwrite(output,sizeof(unsigned char),outsize % insize,fout);
 			printf("Tokenized to %d bytes\n",outsize);
-			
+
 			yylex_destroy();
 			fclose(fout);
-		
+
 			retval = 0;
 			break;
 		default: 	printf("Usage:\t%s text_file_in bin_file_out\n",args[0]);
-	
+
 	}
 	if(input) free(input);
 	if(output) free(output);
@@ -329,4 +326,3 @@ unsigned short tEOF_Val(){
 	return tEOF;
 }
 """)
-	
