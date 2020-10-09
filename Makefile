@@ -22,9 +22,11 @@ assembly: ./bin/GF256PLY.8xp ./bin/ECCTBL.8xp ./bin/BIN2HEXZ.8xp
 
 
 .PHONY: basic
-basic: ./bin/REAL2BIN.8xp ./bin/QRZMAIN.8xp
+basic: ./bin/REAL2BIN.8xp ./bin/QRZMAIN.8xp $(TOKENIZE)
 #	mv ./bin/REAL2BIN.8xp ./bin/QRZMAIN.8xp ./build
 
+$(TOKENIZE):
+	cd ./tools && make && cd ..
 
 ./tmp/REAL2BIN.8xp.1.txt: ./src/basic/REAL2BIN.8xp.txt
 	cat ./src/basic/REAL2BIN.8xp.txt | tr -d '\t' > ./tmp/REAL2BIN.8xp.1.txt

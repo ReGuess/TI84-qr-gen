@@ -10,3 +10,9 @@ DO NOT RUN THIS CODE ON AN ACTUAL CALCULATOR. I haven't confirmed whether it's 1
 
 
 The folder old_Basic_files has some old TI-Basic files from years ago. Some of them were attempts at the backend (made obsolete by the z80 backend I'm working on now), but there should also be some frontend code in there that'll be useful.
+
+## Building
+
+The `tools` folder contains source from https://github.com/elfprince13/TITokens -- I'll have to check, but I think I made some modifications to the python script, and I'll eventually make it a proper submodule of my own fork, ... but yeah.
+
+`wabbit` is found here, with source: https://www.ticalc.org/archives/files/fileinfo/390/39060.html . I had to make a few modifications to get it to compile on Linux, and I'll be sure to upload that to its own repo as well.
