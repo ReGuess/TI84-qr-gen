@@ -1,6 +1,4 @@
-#TITOKENS_PATH ?= ../TITokens
-#TOKENIZE = $(TITOKENS_PATH)/build.sh
-TOKENIZE = ./nolib8xp
+TOKENIZE = ./tools/nolib8xp
 
 ASM = $(shell which spasm fasmg z80asm | head -n1)
 
@@ -25,18 +23,34 @@ assembly: ./bin/GF256PLY.8xp ./bin/ECCTBL.8xp ./bin/BIN2HEXZ.8xp
 
 .PHONY: basic
 basic: ./bin/REAL2BIN.8xp ./bin/QRZMAIN.8xp
+#	mv ./bin/REAL2BIN.8xp ./bin/QRZMAIN.8xp ./build
 
-./bin/REAL2BIN.8xp: ./src/basic/REAL2BIN.8xp.txt
-#	sed 's/\t//g;s/(?<=prgm)([A-Z0-9]|theta)+' ./src/basic/REAL2BIN.8xp.txt > ./tmp/REAL2BIN.8xp.txt
-	$(TOKENIZE) <(cat ./src/basic/REAL2BIN.8xp.txt | tr -d '\t' ) ./bin/REAL2BIN.8xp.bin
-#	$(ASM) 
-#	touch ./bin/REAL2BIN.8xp
 
-./bin/QRZMAIN.8xp: ./src/basic/QRZMAIN.8xp.txt
-	touch ./bin/QRZMAIN.8xp
+./tmp/REAL2BIN.8xp.1.txt: ./src/basic/REAL2BIN.8xp.txt
+	cat ./src/basic/REAL2BIN.8xp.txt | tr -d '\t' > ./tmp/REAL2BIN.8xp.1.txt
+./bin/REAL2BIN.8xp.bin: ./tmp/REAL2BIN.8xp.1.txt
+	$(TOKENIZE) ./tmp/REAL2BIN.8xp.1.txt ./bin/REAL2BIN.8xp.bin
+./bin/REAL2BIN.8xp: ./bin/REAL2BIN.8xp.bin
+	cd ./bin && wabbit REAL2BIN.8xp.bin REAL2BIN.8xp && cd ..
+
+
+#./bin/QRZMAIN.8xp: ./src/basic/QRZMAIN.8xp.txt
+#	touch ./bin/QRZMAIN.8xp
+
+./tmp/QRZMAIN.8xp.1.txt: ./src/basic/QRZMAIN.8xp.txt
+	cat ./src/basic/QRZMAIN.8xp.txt | tr -d '\t' > ./tmp/QRZMAIN.8xp.1.txt
+./bin/QRZMAIN.8xp.bin: ./tmp/QRZMAIN.8xp.1.txt
+	$(TOKENIZE) ./tmp/QRZMAIN.8xp.1.txt ./bin/QRZMAIN.8xp.bin
+./bin/QRZMAIN.8xp: ./bin/QRZMAIN.8xp.bin
+	cd ./bin && wabbit QRZMAIN.8xp.bin QRZMAIN.8xp && cd ..
+
+
 
 
 
 .PHONY: clean
 clean:
-	rm -f ./bin/*.8xp
+	rm -f ./bin/* ./tmp/*  #.8xp
+
+
+#	sed 's/\t//g;s/(?<=prgm)([A-Z0-9]|theta)+' ./src/basic/REAL2BIN.8xp.txt > ./tmp/REAL2BIN.8xp.txt
