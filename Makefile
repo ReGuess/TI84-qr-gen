@@ -8,7 +8,7 @@ ASM = $(shell which spasm fasmg z80asm | head -n1)
 all: assembly basic
 
 .PHONY: assembly
-assembly: ./bin/GF256PLY.8xp ./bin/ECCTBL.8xp ./bin/BIN2HEXZ.8xp
+assembly: ./bin/GF256PLY.8xp ./bin/ECCTBL.8xp ./bin/BIN2HEXZ.8xp ./bin/R2BINZ80.8xp
 
 ./bin/GF256PLY.8xp: ./src/asm/GF256PLY.z80
 	$(ASM) -I./include ./src/asm/GF256PLY.z80 ./bin/GF256PLY.8xp
@@ -19,7 +19,8 @@ assembly: ./bin/GF256PLY.8xp ./bin/ECCTBL.8xp ./bin/BIN2HEXZ.8xp
 ./bin/BIN2HEXZ.8xp: ./src/asm/BIN2HEXZ.z80
 	$(ASM) -I./include ./src/asm/BIN2HEXZ.z80 ./bin/BIN2HEXZ.8xp
 
-
+./bin/R2BINZ80.8xp: ./src/asm/R2BINZ80.z80
+	$(ASM) -I./include ./src/asm/R2BINZ80.z80 ./bin/R2BINZ80.8xp
 
 .PHONY: basic
 basic: ./bin/REAL2BIN.8xp ./bin/QRZMAIN.8xp $(TOKENIZE)
