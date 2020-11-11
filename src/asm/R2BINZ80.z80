@@ -1,0 +1,68 @@
+; Program Name: R2BINZ80
+; Author(s): ReGuess
+; Description: Takes a positive integer in the Real variable X
+;              and puts the Y least significant bits into Str5
+;              (X < 1000, Y <= 16)
+
+.nolist
+#include "ti83plus.inc"
+tmp_str .equ	appBackUpScreen
+.list
+
+	.org	userMem-2
+	.db	$BB,$6D
+
+Start:
+	bcall(_RclX)	; Num to convert
+	bcall(_ConvOP1)
+	push	de
+	bcall(_RclAns)	; number of bits
+	bcall(_ConvOP1)
+	cp	17
+	jr	c, skip_ld16
+	ld	a, 16
+skip_ld16:
+	pop	hl
+	ld	c, a
+	neg
+	add	a, 16
+	ld	b, a
+	jr	z, skip_loop0
+loop0:
+	add	hl, hl
+	djnz	loop0
+skip_loop0:
+	ld	(tmp_str), bc
+	ld	b, c
+	ld	de, tmp_str+2
+	xor	a
+loop1:
+	add	hl, hl
+	adc	a, $30
+	ld	(de), a
+	inc	de
+	xor	a
+	djnz	loop1
+	ld	(de), a
+	;call	init_string
+	;ret
+;init_string:
+	ld	hl, Str5name
+	rst	rMov9ToOP1
+	rst	rFindSym
+	jr	c, not_found
+	bcall(_DelVarArc)
+not_found:
+	ld	hl, (tmp_str)
+	bcall(_CreateStrng)
+	ld	a, (de)
+	ld	c, a
+	ld	b, 0
+	inc	de
+	inc	de
+	ld	hl, tmp_str+2
+	ldir
+	ret
+
+Str5name:
+	.db	StrngObj, $AA, 4, 0, 0
