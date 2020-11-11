@@ -1,0 +1,126 @@
+.nolist
+#include "ti83plus.inc"
+.list
+
+.org	userMem - 2
+.db	$BB, $6D
+
+Start:
+	bcall(_RclAns)		; TODO: Stop relying on Ans being V
+	bcall(_ConvOP1)
+	push de
+	bcall(_RclX)
+	bcall(_ConvOP1)
+	pop  hl
+	; HL = Version, DE = ECC Level
+	; (In fact, since HL <= 40 and DE < 4, we can say L = Vrsn and E = Lvl)
+
+	call  test_eccpb
+	ret
+
+; Inputs:
+;	HL = Version. (Specifically: L = Version, H = 0)
+;	DE = Error correction level. (Similarly, D = 0) 
+; Outputs: Basic variable Theta =
+; Destroyed: All 
+test_eccpb:
+	dec e
+	dec l
+	add hl, hl
+	add hl, hl
+	add hl, de
+	ld  de, ECCodewds_p_blk
+	add hl, de
+	ld   a, (hl)
+
+	bcall(_SetXXOP1)
+	bcall(_StoTheta)
+
+	ret
+
+
+
+; Taken from WikiTI:
+; https://wikiti.brandonw.net/index.php?title=Z80_Routines:Math:Multiplication
+; HL = H * E
+; Destroyed: A, B, D
+mult_h_e:
+	ld	d, 0	; Combining the overhead and
+	sla	h	; optimised first iteration
+	sbc	a, a
+	and	e
+	ld	l, a
+	ld	b, 7
+mult_h_e_loop:
+	add	hl, hl
+	jr	nc, $+3
+	add	hl, de
+	djnz	mult_h_e_loop
+	ret
+
+
+
+
+
+datablks:
+.db	1,	19,	0,	0
+.db	1,	16,	0,	0
+.db	1,	13,	0,	0
+.db	1,	9,	0,	0
+.db	1,	34,	0,	0
+.db	1,	28,	0,	0
+.db	1,	22,	0,	0
+.db	1,	16,	0,	0
+.db	1,	55,	0,	0
+.db	1,	44,	0,	0
+.db	2,	17,	0,	0
+.db	2,	13,	0,	0
+.db	1,	80,	0,	0
+.db	2,	32,	0,	0
+.db	2,	24,	0,	0
+.db	4,	9,	0,	0
+.db	1,	108,	0,	0
+.db	2,	43,	0,	0
+.db	2,	15,	2,	16
+.db	2,	11,	2,	12
+.db	2,	68,	0,	0
+.db	4,	27,	0,	0
+.db	4,	19,	0,	0
+.db	4,	15,	0,	0
+.db	2,	78,	0,	0
+.db	4,	31,	0,	0
+.db	2,	14,	4,	15
+.db	4,	13,	1,	14
+.db	2,	97,	0,	0
+.db	2,	38,	2,	39
+.db	4,	18,	2,	19
+.db	4,	14,	2,	15
+.db	2,	116,	0,	0
+.db	3,	36,	2,	37
+.db	4,	16,	4,	17
+.db	4,	12,	4,	13
+.db	2,	68,	2,	69
+.db	4,	43,	1,	44
+.db	6,	19,	2,	20
+.db	6,	15,	2,	16
+.db	4,	81,	0,	0
+.db	1,	50,	4,	51
+.db	4,	22,	4,	23
+.db	3,	12,	8,	13
+
+capacities:
+.dw 26, 44, 70, 100, 134, 172, 196, 242, 292, 346, 404
+
+ECCodewds_p_blk:
+.db	 7, 10, 13, 17		;  1 
+.db	10, 16, 22, 28		;  2
+.db	15, 26, 18, 22		;  3
+.db	20, 18, 26, 16		;  4
+.db	26, 24, 18, 22		;  5
+.db	18, 16, 24, 28		;  6
+.db	20, 18, 18, 26		;  7
+.db	24, 22, 22, 26		;  8
+.db	30, 22, 20, 24		;  9
+.db	18, 26, 24, 28		; 10
+.db	20, 30, 28, 24		; 11
+
