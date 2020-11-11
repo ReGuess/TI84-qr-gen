@@ -16,7 +16,7 @@ Start:
 	bcall(_RclX)	; Num to convert
 	bcall(_ConvOP1)
 	push	de
-	bcall(_RclAns)	; number of bits
+	bcall(_RclY)	; number of bits
 	bcall(_ConvOP1)
 	cp	17
 	jr	c, skip_ld16
